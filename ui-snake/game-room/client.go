@@ -15,6 +15,10 @@ type GameRoom struct {
 	conn net.Conn
 }
 
+func NewClient() GameRoom {
+	return GameRoom{}
+}
+
 func (g *GameRoom) Connect(s string) error {
 	conn, err := net.Dial("tcp", s)
 

@@ -19,6 +19,8 @@ func TestClientConnect(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Equal(t, err, ErrCantConnectWithServer)
+
+		defer client.Disconnect()
 	})
 
 	t.Run("Connect to Gameroom that exist should fail", func(t *testing.T) {
@@ -28,6 +30,7 @@ func TestClientConnect(t *testing.T) {
 		err := client.Connect(url)
 
 		assert.Nil(t, err)
+		defer client.Disconnect()
 	})
 }
 
@@ -41,6 +44,7 @@ func TestClientReadStatus(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.NotNil(t, status)
+		defer client.Disconnect()
 	})
 
 	t.Run("Read status from unconnected client should return an error", func(t *testing.T) {
@@ -50,6 +54,8 @@ func TestClientReadStatus(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Equal(t, err, ErrConnectionNotCreated)
+
+		defer client.Disconnect()
 	})
 }
 
@@ -62,6 +68,8 @@ func TestClientDisconnect(t *testing.T) {
 		err := client.Disconnect()
 
 		assert.Nil(t, err)
+
+		defer client.Disconnect()
 	})
 
 	t.Run("Close a not opened connection should fail", func(t *testing.T) {
@@ -71,5 +79,7 @@ func TestClientDisconnect(t *testing.T) {
 
 		assert.NotNil(t, err)
 		assert.Equal(t, err, ErrConnectionNotCreated)
+
+		defer client.Disconnect()
 	})
 }
