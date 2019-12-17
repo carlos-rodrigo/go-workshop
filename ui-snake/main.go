@@ -10,17 +10,19 @@ func main() {
 
 	client := gameroom.NewClient()
 	err := client.Connect(":8082")
+	if err != nil {
+		fmt.Printf("%q", err)
+	}
+	fmt.Println("Client Connected")
+
 	defer client.Disconnect()
 
+	//Read status of the game
 	for {
-		if err != nil {
-			fmt.Printf("%q", err)
-		}
-		fmt.Println("Client Connected")
-		//Read status of the game
 		status, err1 := client.ReadStatus()
 		if err1 != nil {
 			fmt.Printf("%q", err)
+			//Exist
 			break
 		}
 		//Stop the game
