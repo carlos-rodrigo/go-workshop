@@ -1,27 +1,40 @@
-package client
+package main
 
-import "fmt"
+import (
+	"fmt"
+
+	gameroom "github.com/go-workshop/ui-snake/game-room"
+)
 
 func main() {
 
-	client := NewClient()
-	err := client.Connect("127.0.0.1:8083")
-	if err != nil {
-		fmt.Printf("#v%q", err)
-	}
+	client := gameroom.NewClient()
+	err := client.Connect(":8082")
+	defer client.Disconnect()
 
 	for {
-		status, err := client.ReadStatus()
 		if err != nil {
-			fmt.Printf("#v%q", err)
+			fmt.Printf("%q", err)
 		}
-		//Here we should print the snakes in console
-		fmt.Printf(status)
-
-		if status.GameOver {
+		fmt.Println("Client Connected")
+		//Read status of the game
+		status, err1 := client.ReadStatus()
+		if err1 != nil {
+			fmt.Printf("%q", err)
 			break
 		}
+		//Stop the game
+		if !status.GameOver {
+			fmt.Printf("%#v\n", status)
+		}
 	}
+	//Read actions from console
+	//reader := bufio.NewReader(os.Stdin)
+	//text, _ := reader.ReadString('\n')
 
-	defer client.Disconnect()
+	//err2 := client.SendAction(text)
+
+	//if err2 != nil {
+	//	fmt.Printf("%q", err)
+	//}
 }

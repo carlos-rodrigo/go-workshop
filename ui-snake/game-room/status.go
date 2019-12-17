@@ -5,6 +5,8 @@ type SnakeStatus struct {
 	PlayerOne []Position `json:"player_one"`
 	PlayerTwo []Position `json:"player_two"`
 	Fruit     Position   `json:"fruit"`
+	GameOver  bool       `json:"game_over"`
+	Winner    string     `json:"winner"`
 }
 
 type Board struct {

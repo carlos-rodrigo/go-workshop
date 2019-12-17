@@ -83,3 +83,15 @@ func TestClientDisconnect(t *testing.T) {
 		defer client.Disconnect()
 	})
 }
+
+func TestClientSendAction(t *testing.T) {
+	t.Run("Send action to the server should return error if server is not conected", func(t *testing.T) {
+		client := NewGameRoomClient()
+		url := "127.0.0.1:8083"
+		client.Connect(url)
+
+		err := client.SendAction("UP")
+
+		assert.Nil(t, err)
+	})
+}

@@ -1,29 +1,44 @@
 package main
 
-import "net"
-import "fmt"
-import "bufio"
-import "strings" // only needed below for sample processing
+import (
+	"encoding/json"
+	"fmt"
+	"net"
+
+	gameroom "github.com/go-workshop/ui-snake/game-room"
+)
+
+// only needed below for sample processing
 
 func main() {
 
 	fmt.Println("Launching server...")
 
 	// listen on all interfaces
-	ln, _ := net.Listen("tcp", ":8083")
+	ln, _ := net.Listen("tcp", ":8082")
+	fmt.Printf(ln.Addr().String())
 
-	// accept connection on port
-	conn, _ := ln.Accept()
-
-	// run loop forever (or until ctrl-c)
+	defer ln.Close()
 	for {
+		// accept connection on port
+
+		conn, _ := ln.Accept()
 		// will listen for message to process ending in newline (\n)
-		message, _ := bufio.NewReader(conn).ReadString('\n')
-		// output message received
-		fmt.Print("Message Received:", string(message))
-		// sample process for string received
-		newmessage := strings.ToUpper(message)
+		gamestatus := gameroom.SnakeStatus{
+			Board:     gameroom.Board{20, 20},
+			PlayerOne: []gameroom.Position{gameroom.Position{1, 1}},
+			PlayerTwo: []gameroom.Position{gameroom.Position{1, 1}},
+			Fruit:     gameroom.Position{2, 2},
+			GameOver:  false,
+			Winner:    "El negro de whatsapp",
+		}
+
+		bytesStatus, _ := json.Marshal(gamestatus)
 		// send new string back to client
-		conn.Write([]byte(newmessage + "\n"))
+		stringStatus := string(bytesStatus)
+		// adding delimiter
+		stringStatus = stringStatus + "\n"
+
+		conn.Write([]byte(stringStatus))
 	}
 }
