@@ -1,6 +1,6 @@
 package gameroom
 
-type SnakeStatus struct {
+type GameStatus struct {
 	Board     Board      `json:"board"`
 	PlayerOne []Position `json:"player_one"`
 	PlayerTwo []Position `json:"player_two"`

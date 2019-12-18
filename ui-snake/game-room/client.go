@@ -9,7 +9,7 @@ import (
 
 type Client interface {
 	Connect(s string) error
-	ReadStatus() (SnakeStatus, error)
+	ReadStatus() (GameStatus, error)
 	SendAction(s string) error
 	Disconnect() error
 }
@@ -18,8 +18,8 @@ type GameRoom struct {
 	conn net.Conn
 }
 
-func NewClient() GameRoom {
-	return GameRoom{}
+func NewClient() Client {
+	return &GameRoom{}
 }
 
 func (g *GameRoom) Connect(s string) error {
@@ -34,23 +34,23 @@ func (g *GameRoom) Connect(s string) error {
 	return nil
 }
 
-func (g *GameRoom) ReadStatus() (SnakeStatus, error) {
+func (g *GameRoom) ReadStatus() (GameStatus, error) {
 	if g.conn == nil {
-		return SnakeStatus{}, ErrConnectionNotCreated
+		return GameStatus{}, ErrConnectionNotCreated
 	}
 
 	stringStatus, errRead := bufio.NewReader(g.conn).ReadString('\n')
 
 	if errRead != nil {
-		return SnakeStatus{}, ErrCantReadStatus
+		return GameStatus{}, ErrCantReadStatus
 	}
 
 	stringStatus = strings.ReplaceAll(stringStatus, "\n", "")
-	var status SnakeStatus
+	var status GameStatus
 	errUnmarshal := json.Unmarshal([]byte(stringStatus), &status)
 
 	if errUnmarshal != nil {
-		return SnakeStatus{}, ErrCantDecodeStatus
+		return GameStatus{}, ErrCantDecodeStatus
 	}
 
 	return status, nil

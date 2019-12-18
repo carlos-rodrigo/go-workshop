@@ -10,7 +10,7 @@ import (
 
 // only needed below for sample processing
 
-func main() {
+func main2() {
 
 	fmt.Println("Launching server...")
 
@@ -24,11 +24,11 @@ func main() {
 
 		conn, _ := ln.Accept()
 		// will listen for message to process ending in newline (\n)
-		gamestatus := gameroom.SnakeStatus{
-			Board:     gameroom.Board{20, 20},
-			PlayerOne: []gameroom.Position{gameroom.Position{1, 1}},
-			PlayerTwo: []gameroom.Position{gameroom.Position{1, 1}},
-			Fruit:     gameroom.Position{2, 2},
+		gamestatus := gameroom.GameStatus{
+			Board:     gameroom.Board{Length: 20, Width: 20},
+			PlayerOne: []gameroom.Position{gameroom.Position{X: 1, Y: 1}},
+			PlayerTwo: []gameroom.Position{gameroom.Position{X: 1, Y: 1}},
+			Fruit:     gameroom.Position{X: 2, Y: 2},
 			GameOver:  false,
 			Winner:    "El negro de whatsapp",
 		}
